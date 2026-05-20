@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LOUD&nbsp;//&nbsp;Live Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@400;700&family=Bowlby+One+SC&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="masthead">
+    <div class="mast-row">
+      <div class="logo">LOUD<span class="slash">//</span></div>
+      <div class="ticker" id="ticker" aria-live="polite">— LIVE FEED —</div>
+      <nav class="nav">
+        <a href="#events" class="nav-link">EVENTS</a>
+        <a href="#about" class="nav-link">ABOUT</a>
+      </nav>
+    </div>
+    <div class="mast-rule"></div>
+    <div class="mast-meta">
+      <span>NO. <strong>04</strong></span>
+      <span>EST. <strong>2026</strong></span>
+      <span>VOL. <strong>I</strong></span>
+      <span class="city" id="city-tag">/// LATAM</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1 class="hero-h">
+        <span class="hero-l1">TICKETS</span>
+        <span class="hero-l2">FOR THE</span>
+        <span class="hero-l3">LOUDEST</span>
+        <span class="hero-l4">NIGHTS</span>
+      </h1>
+      <div class="hero-side">
+        <p class="hero-blurb">
+          Independent. Sweaty. Real venues, real lineups. No bots, no resale,
+          no nonsense. Pick a night, lock the tier, walk in.
+        </p>
+        <div class="hero-stamp">UNRESERVED&nbsp;·&nbsp;UNFILTERED</div>
+      </div>
+    </section>
+
+    <section id="events" class="grid-section">
+      <div class="grid-head">
+        <h2>UPCOMING&nbsp;&nbsp;&nbsp;NIGHTS</h2>
+        <div class="filter-bar">
+          <label class="search">
+            <span>FIND</span>
+            <input id="q" type="search" placeholder="band, venue, city…" autocomplete="off">
+          </label>
+          <div class="sort">
+            <button data-sort="date" class="sort-btn is-active">SOON</button>
+            <button data-sort="price" class="sort-btn">CHEAP</button>
+            <button data-sort="capacity" class="sort-btn">FREE&nbsp;SEATS</button>
+          </div>
+        </div>
+      </div>
+
+      <ul id="event-grid" class="event-grid" aria-busy="true">
+        <li class="placeholder">loading the noise…</li>
+      </ul>
+
+      <div class="paging">
+        <button id="prev" class="page-btn" disabled>← PREV</button>
+        <span id="page-info" class="page-info">PAGE 1</span>
+        <button id="next" class="page-btn">NEXT →</button>
+      </div>
+    </section>
+
+    <section id="about" class="about">
+      <div class="about-col">
+        <h3>HOW THIS WORKS</h3>
+        <p>
+          Each event has a venue, a date, and one or more <em>ticket tiers</em>
+          (General, VIP, Early Bird). Tickets are sold as part of an
+          <em>order</em>; you can hold several tickets in one order.
+          Availability is computed live: capacity minus confirmed tickets.
+        </p>
+      </div>
+      <div class="about-col">
+        <h3>API CONTRACT</h3>
+        <pre class="api">
+GET /api/v1/events/
+  ?q=&amp;page=&amp;page_size=&amp;sort=
+  → { count, page, results: [Event] }
+
+GET /api/v1/events/{id}
+  → EventDetail (with tiers + availability)
+
+Event {
+  id, title, starts_at, venue { city, name },
+  min_price, available, total_capacity
+}</pre>
+      </div>
+      <div class="about-col">
+        <h3>NO BOTS</h3>
+        <p>
+          One IP, one cart, one chance. If you see a 429 with a Retry-After
+          header — slow down. That's the door staff, not a bug.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Event detail dialog -->
+  <dialog id="event-modal" class="modal">
+    <article class="modal-card">
+      <button class="close" aria-label="close" data-close>×</button>
+      <div class="modal-body" id="modal-body">loading…</div>
+    </article>
+  </dialog>
+
+  <footer class="foot">
+    <div class="foot-bar">
+      <span>© LOUD//</span>
+      <span class="foot-mid">printed on the internet — pulled from <code>/api/v1/events/</code></span>
+      <span id="health-dot" class="health" title="API status">●&nbsp;CHECKING…</span>
+    </div>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

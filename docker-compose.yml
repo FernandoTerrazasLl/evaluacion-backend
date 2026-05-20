@@ -1,0 +1,18 @@
+networks:
+  tickets:
+    driver: bridge
+services:
+  frontend-tickets:
+    build: ./tickets
+    networks:
+      - tickets
+  
+  nginx:
+    build: ./nginx
+    networks:
+      - tickets
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend-tickets
+    
