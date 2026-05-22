@@ -10,7 +10,6 @@ from services.events import EventService, get_event_service
 
 router = APIRouter()
 
-
 @router.get('/', response_model=PaginatedEventsOut)
 @limiter.limit(get_rate_limit)
 async def list_events(
