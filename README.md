@@ -1,1 +1,44 @@
-# evaluacion-backend
+# SISTEMA DE RESERVAS LOUD
+
+Este documento explica de forma simple el funcionamiento del sistema de reservas LOUD, como ponerlo en marcha, como correr las pruebas de software, el diagrama de interaccion de sus modulos, las decisiones tomadas durante el diseno del backend y las limitaciones o cosas que se harian de otra forma con mas tiempo.
+
+## DIAGRAMA DEL SISTEMA
+
+El trafico exterior entra por Nginx en el puerto 80. Nginx se encarga de rutear las peticiones segun la ruta especificada. Las rutas `/admin` y `/static` se dirigen al servicio de Django. Las rutas que comienzan con `/api/` van directo al backend rapido de FastAPI. La ruta raiz `/` sirve los archivos estaticos del frontend que estan en el contenedor de tickets. Django escribe en Postgres y FastAPI lee de Postgres y cachea las consultas en Redis.
+
+<img width="467" height="647" alt="Image" src="https://github.com/user-attachments/assets/df732ad3-a05b-41a7-9dab-606685f83602" />
+
+<img width="918" height="613" alt="Image" src="https://github.com/user-attachments/assets/bc3ee9b9-fc85-4cae-9525-c4192cdab8ce" />
+
+## COMO EJECUTAR EL PROYECTO
+
+Para levantar todo el entorno con un unico comando se debe ejecutar en la terminal `docker compose up --build -d` desde la carpeta raiz del proyecto. Esto creara y levantara los contenedores de Postgres, Redis, Django, FastAPI y Nginx de forma ordenada y con sus respectivos controles de salud.
+
+Para acceder al panel de administracion de Django se debe ingresar a la direccion `http://localhost/admin/` utilizando las credenciales que se encuentran configuradas en el archivo de variables de entorno. El frontend principal estara disponible directamente en la direccion `http://localhost/` en tu navegador.
+
+## COMO CORRER LAS PRUEBAS
+
+Las pruebas de calidad del software estan divididas por servicios para asegurar que cada componente funciona de forma correcta tanto integrada como en conjunto.
+
+Para ejecutar las pruebas del servicio de Django se debe ingresar a la terminal y correr el comando `docker compose exec django python manage.py test` el cual ejecutara las validaciones de forma automatica.
+
+Para ejecutar las pruebas del servicio de FastAPI se debe correr el comando `docker compose exec fastapi pytest` en la terminal.
+
+## DECISIONES DE DISENO
+
+Se decidio desacoplar completamente el funcionamiento de FastAPI de Django a nivel de tiempo de ejecucion en la configuracion de Docker Compose. Esto significa que si el panel de administracion de Django se detiene o falla por cualquier motivo el servicio publico de venta de entradas que corre sobre FastAPI seguira funcionando sin interrupciones consumiendo datos directamente de la base de datos de Postgres y de Redis.
+
+"Graceful Degradation:
+En caso de una falla en el servidor de caché (Redis), el servicio seguira funcionando sin cache.
+
+Para las reglas de negocio de precios se implemento una logica basada en ventanas de tiempo. Cada tipo de ticket posee fechas de inicio y fin de validez. El sistema calcula en tiempo real cual es el precio minimo de un evento basandose unicamente en las tarifas activas en ese preciso instante y en caso de que existan varias tarifas validas al mismo tiempo siempre se prioriza la de menor costo para beneficiar al usuario final.
+
+En cuanto a la estrategia de cache en Redis se opto por guardar las respuestas de listados y detalles por un tiempo de trescientos segundos. Para evitar fallas de cache por variaciones de milisegundos en la hora de consulta se redondea el tiempo de la peticion a los diez segundos mas cercanos al generar la llave de cache logrando asi un alto rendimiento y consistencia. 
+
+## COMPROMISOS Y LIMITACIONES
+
+Lo que mas me hizo pensar fue el compromiso del redondeo de la hora de la peticion a diez segundos para la llave de Redis. Esto genera que un cambio de precio o expiracion de ticket tarde hasta diez segundos en verse reflejado en las busquedas de los usuarios pero a cambio reduce la carga de consultas repetitivas en la base de datos Postgres de forma significativa. Se analizo para que tenga un balance entre seguridad y rendimiento.
+
+## MEJORAS PARA EL FUTURO
+
+Con mas tiempo se deberia implementar un sistema de autenticacion en el fastapi, validar UTC a nivel general (actualmente se definio todo en horario bolivia). Implementar de manera mas eficaz el redis. 
