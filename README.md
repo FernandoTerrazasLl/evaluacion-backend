@@ -42,3 +42,9 @@ Lo que mas me hizo pensar fue el compromiso del redondeo de la hora de la petici
 ## MEJORAS PARA EL FUTURO
 
 Con mas tiempo se deberia implementar un sistema de autenticacion en el fastapi, validar UTC a nivel general (actualmente se definio todo en horario bolivia). Implementar de manera mas eficaz el redis. 
+
+## LO QUE ESTOY MAS ORGULLOSO Y MENOS ORGULLOSO
+
+Lo que estoy mas orgulloso es de que aprendi perfectamente a usar nginx en este materia, docker y dockerfiles. Por lo que estoy contento con este aprendizaje y seguramente lo hice bien todo ese proceso en el proyecto. 
+
+Lo que me siento menos orgulloso fue en el hecho de que el frontend aunque no es el objetivo de esta competencia, no soy muy bueno revisando siquiera el codigo para darme cuenta de que apis tiene. Tuve que fijarme muy bien estos detalles. ADEMAS otra cosa que me costo fue el hecho de que no sabia porque no se interpretaba bien los contenedores de python, resulta que era porque las librerias de python usan rust y c y tenia que tener un monton de librerias para correrlas.

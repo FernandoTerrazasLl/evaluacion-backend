@@ -70,8 +70,6 @@ async def fetch_events_page(
 ) -> list[asyncpg.Record]:
     offset = (page - 1) * page_size
     
-    # Base query utilizing subqueries to avoid duplicate row counts in flat joins,
-    # and filtering by request_time to compute active min_price.
     base_sql = """
         SELECT
             e.id,
@@ -100,12 +98,10 @@ async def fetch_events_page(
         where_clause = " WHERE e.title ILIKE $2 OR e.description ILIKE $2 OR v.name ILIKE $2 OR v.city ILIKE $2"
         params.append(f"%{query}%")
     
-    # Sorting logic matching the frontend expectations
-    order_clause = " ORDER BY e.starts_at ASC"  # Default "date" (Soon)
+    order_clause = " ORDER BY e.starts_at ASC"  
     if sort == "price":
-        order_clause = " ORDER BY min_price ASC NULLS LAST"  # Cheap
+        order_clause = " ORDER BY min_price ASC NULLS LAST"
     elif sort == "capacity":
-        # Sort by available seats = total_quantity - sold (Free seats descending)
         order_clause = " ORDER BY ((SELECT COALESCE(SUM(total_quantity), 0) FROM content.tickettype WHERE event_id = e.id) - (SELECT COUNT(*) FROM content.ticket t JOIN content.tickettype tt ON t.ticket_type_id = tt.id WHERE tt.event_id = e.id)) DESC"
         
     sql = base_sql + where_clause + order_clause + f" LIMIT ${len(params) + 1} OFFSET ${len(params) + 2}"
@@ -132,7 +128,6 @@ async def fetch_event_detail(conn: asyncpg.Connection, event_id: str) -> asyncpg
 
 
 async def fetch_event_tiers(conn: asyncpg.Connection, event_id: str, request_time: datetime) -> list[asyncpg.Record]:
-    # Returns only ticket types that are active at request_time, ordered by price (lowest price first)
     sql = """
         SELECT
             tt.id,
