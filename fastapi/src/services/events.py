@@ -61,13 +61,11 @@ class PostgresEventRepository(EventRepositoryInterface):
     def pool(self) -> Any:
         if self._pool is not None:
             return self._pool
-        from db.postgres import get_pool
-        return get_pool()
+        return postgres.get_pool()
 
     async def get_events_count(self, query: str | None = None) -> int:
-        from db.postgres import fetch_events_count
         async with self.pool.acquire() as conn:
-            return await fetch_events_count(conn, query=query)
+            return await postgres.fetch_events_count(conn, query=query)
 
     async def get_events_page(
         self,
@@ -77,11 +75,10 @@ class PostgresEventRepository(EventRepositoryInterface):
         sort: str | None = "date",
         request_time: datetime | None = None
     ) -> list[dict]:
-        from db.postgres import fetch_events_page
         if request_time is None:
             request_time = datetime.now(timezone.utc)
         async with self.pool.acquire() as conn:
-            records = await fetch_events_page(
+            records = await postgres.fetch_events_page(
                 conn,
                 page=page,
                 page_size=page_size,
@@ -92,20 +89,17 @@ class PostgresEventRepository(EventRepositoryInterface):
             return [dict(r) for r in records]
 
     async def get_event_detail(self, event_id: str) -> Optional[dict]:
-        from db.postgres import fetch_event_detail
         async with self.pool.acquire() as conn:
-            record = await fetch_event_detail(conn, event_id)
+            record = await postgres.fetch_event_detail(conn, event_id)
             return dict(record) if record else None
 
     async def get_event_tiers(self, event_id: str, request_time: datetime) -> list[dict]:
-        from db.postgres import fetch_event_tiers
         async with self.pool.acquire() as conn:
-            records = await fetch_event_tiers(conn, event_id, request_time=request_time)
+            records = await postgres.fetch_event_tiers(conn, event_id, request_time=request_time)
             return [dict(r) for r in records]
 
 
 class EventSearchInterface(Protocol):
-    """Protocol defining the interface for searching events (SOLID DIP)."""
     async def search_events(
         self,
         query: str,

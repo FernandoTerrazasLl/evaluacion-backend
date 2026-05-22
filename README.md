@@ -48,3 +48,79 @@ Con mas tiempo se deberia implementar un sistema de autenticacion en el fastapi,
 Lo que estoy mas orgulloso es de que aprendi perfectamente a usar nginx en este materia, docker y dockerfiles. Por lo que estoy contento con este aprendizaje y seguramente lo hice bien todo ese proceso en el proyecto. 
 
 Lo que me siento menos orgulloso fue en el hecho de que el frontend aunque no es el objetivo de esta competencia, no soy muy bueno revisando siquiera el codigo para darme cuenta de que apis tiene. Tuve que fijarme muy bien estos detalles. ADEMAS otra cosa que me costo fue el hecho de que no sabia porque no se interpretaba bien los contenedores de python, resulta que era porque las librerias de python usan rust y c y tenia que tener un monton de librerias para correrlas.
+
+## Apis Estructura
+
+### /api/v1/events/?page=2&sort=price.
+
+{
+  "count": 150,
+  "page": 1,
+  "results": [
+    {
+      "id": "c9b0c268-d0ad-48b4-845b-7c37fa9e8dfb",
+      "title": "Mega Concierto de Rock",
+      "starts_at": "2026-07-10T21:00:00Z",
+      "venue": {
+        "name": "Teatro Al Aire Libre",
+        "city": "La Paz"
+      },
+      "min_price": 75.50,
+      "available": 420,
+      "total_capacity": 500
+    }
+  ]
+}
+
+### GET /api/v1/events/search/
+
+{
+  "count": 1,
+  "page": 1,
+  "results": [
+    {
+      "id": "c9b0c268-d0ad-48b4-845b-7c37fa9e8dfb",
+      "title": "Mega Concierto de Rock",
+      "starts_at": "2026-07-10T21:00:00Z",
+      "venue": {
+        "name": "Teatro Al Aire Libre",
+        "city": "La Paz"
+      },
+      "min_price": 75.50,
+      "available": 420,
+      "total_capacity": 500
+    }
+  ]
+}
+
+### GET /api/v1/events/{event_id}
+
+{
+  "id": "c9b0c268-d0ad-48b4-845b-7c37fa9e8dfb",
+  "title": "Mega Concierto de Rock",
+  "starts_at": "2026-07-10T21:00:00Z",
+  "venue": {
+    "name": "Teatro Al Aire Libre",
+    "city": "La Paz"
+  },
+  "description": "El festival de rock más grande del año con bandas internacionales invitadas.",
+  "min_price": 75.50,
+  "available": 420,
+  "total_capacity": 500,
+  "tiers": [
+    {
+      "name": "General",
+      "price": 75.50,
+      "available": 300
+    },
+    {
+      "name": "VIP",
+      "price": 250.00,
+      "available": 120
+    }
+  ]
+}
+
+### GET /api/v1/healthz 
+
+Sin body
