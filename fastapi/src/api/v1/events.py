@@ -58,3 +58,16 @@ async def event_details(
     if not event:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='event not found')
     return EventDetailOut.model_validate(event.model_dump())
+
+@router.get('/{id}/price-history')
+@limiter.limit(get_rate_limit)
+async def list_events(
+    request: Request,
+    event_service: EventService = Depends(get_event_service),
+) -> PaginatedEventsOut:
+    count, results = await event_service.list_events()
+    return PaginatedEventsOut(
+        count=count,
+        page=page,
+        results=[EventListItemOut.model_validate(item.model_dump()) for item in results],
+    )

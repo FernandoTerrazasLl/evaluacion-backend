@@ -1,5 +1,10 @@
 # SISTEMA DE RESERVAS LOUD
 
+# DEFENSA DE EXAMEN
+
+CAMBIE LAS CONSULTAS, LOS SERVICIOS, MODELOS Y DTO PARA MOSTRAR TODO CORRECTAMENTE.
+LO HICE EN LOS ENDPOINTS DE /events Y DE /events/{id}.
+
 Este documento explica de forma simple el funcionamiento del sistema de reservas LOUD, como ponerlo en marcha, como correr las pruebas de software, el diagrama de interaccion de sus modulos, las decisiones tomadas durante el diseno del backend y las limitaciones o cosas que se harian de otra forma con mas tiempo.
 
 ## DIAGRAMA DEL SISTEMA
@@ -136,3 +141,6 @@ Con la libreria limiter se agrego un limite DE 100 consultas por minuto para cad
 ### GET /api/v1/healthz 
 
 Sin body
+
+
+# DEFENSA DE EXAMEN
