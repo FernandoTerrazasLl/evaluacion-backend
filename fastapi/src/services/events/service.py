@@ -76,13 +76,15 @@ class EventService:
             total_quantity = int(row["total_quantity"])
             sold = int(row["sold"])
             available = max(total_quantity - sold, 0)
+            
             items.append(
                 EventListItem(
                     id=str(row["id"]),
                     title=row["title"],
                     starts_at=row["starts_at"],
                     venue=Venue(name=row["venue_name"], city=row["venue_city"]),
-                    min_price=row["min_price"],
+                    current_price=row["current_price"],
+                    current_tier_id=str(row["current_tier_id"]),
                     available=available,
                     total_capacity=int(row["total_capacity"]),
                 )
@@ -111,16 +113,18 @@ class EventService:
         tiers_rows = await self.repository.get_event_tiers(event_id, request_time=request_time)
 
         tiers: list[Tier] = []
-        min_price = None
+        current_price = None
         total_available = 0
+        current_tier_id="" #
         for tier_row in tiers_rows:
             quantity = int(tier_row["total_quantity"])
             sold = int(tier_row["sold"])
             available = max(quantity - sold, 0)
             total_available += available
             price = tier_row["price"]
-            if min_price is None or price < min_price:
-                min_price = price
+            if current_price is None or price < current_price:
+                current_price = price
+                current_tier_id = str(tier_row["id"])#
             tiers.append(Tier(name=tier_row["name"], price=price, available=available))
 
         event = EventDetail(
@@ -129,7 +133,8 @@ class EventService:
             starts_at=row["starts_at"],
             venue=Venue(name=row["venue_name"], city=row["venue_city"]),
             description=row["description"],
-            min_price=min_price,
+            current_price=current_price,
+            current_tier_id=str(current_tier_id),
             available=total_available,
             total_capacity=int(row["total_capacity"]),
             tiers=tiers,

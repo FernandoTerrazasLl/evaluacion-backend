@@ -20,7 +20,8 @@ class EventListItemOut(BaseModel):
     title: str
     starts_at: datetime
     venue: VenueOut
-    min_price: Decimal | None
+    current_price: Decimal | None
+    current_tier_id: str
     available: int
     total_capacity: int
 
@@ -31,7 +32,7 @@ class EventDetailOut(BaseModel):
     starts_at: datetime
     venue: VenueOut
     description: str | None
-    min_price: Decimal | None
+    current_price: Decimal | None
     available: int
     total_capacity: int
     tiers: list[TierOut]

@@ -69,7 +69,7 @@ async def fetch_events_page(
     request_time: datetime
 ) -> list[asyncpg.Record]:
     offset = (page - 1) * page_size
-    
+    #CAMBIO DEL EXAMEN
     base_sql = """
         SELECT
             e.id,
@@ -84,7 +84,14 @@ async def fetch_events_page(
                 WHERE event_id = e.id
                   AND (start_date IS NULL OR $1::timestamp with time zone >= start_date)
                   AND (end_date IS NULL OR $1::timestamp with time zone <= end_date)
-            ) AS min_price,
+            ) AS current_price,
+            (
+                SELECT id 
+                FROM content.tickettype 
+                where event_id=e.id
+                order by price
+                limit 1
+            ) AS current_tier_id,
             (SELECT COALESCE(SUM(total_quantity), 0) FROM content.tickettype WHERE event_id = e.id) AS total_quantity,
             (SELECT COUNT(*) FROM content.ticket t JOIN content.tickettype tt ON t.ticket_type_id = tt.id WHERE tt.event_id = e.id) AS sold
         FROM content.event e

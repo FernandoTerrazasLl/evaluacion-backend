@@ -57,6 +57,10 @@ Lo que estoy mas orgulloso es de que aprendi perfectamente a usar nginx en este 
 
 Lo que me siento menos orgulloso fue en el hecho de que el frontend aunque no es el objetivo de esta competencia, no soy muy bueno revisando siquiera el codigo para darme cuenta de que apis tiene. Tuve que fijarme muy bien estos detalles. ADEMAS otra cosa que me costo fue el hecho de que no sabia porque no se interpretaba bien los contenedores de python, resulta que era porque las librerias de python usan rust y c y tenia que tener un monton de librerias para correrlas.
 
+## RATE LIMIT IMPLEMENTADO
+
+Con la libreria limiter se agrego un limite DE 100 consultas por minuto para cada usuario para cumplicar con el criterio extra de limites
+
 ## Apis Estructura
 
 ### /api/v1/events/?page=2&sort=price.
