@@ -1,5 +1,5 @@
 import json
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from functools import lru_cache
 from typing import Optional, Any
 
@@ -8,7 +8,7 @@ from redis.asyncio import Redis
 
 from db import postgres
 from db.redis import get_redis
-from models.events import EventDetail, EventListItem, Tier, Venue
+from models.events import EventDetail, EventListItem, Tier, Venue, PriceHistory
 
 from .interfaces import CacheInterface, EventRepositoryInterface, EventSearchInterface
 from .cache import CACHE_TTL_SECONDS, RedisCache
@@ -76,7 +76,7 @@ class EventService:
             total_quantity = int(row["total_quantity"])
             sold = int(row["sold"])
             available = max(total_quantity - sold, 0)
-            
+
             items.append(
                 EventListItem(
                     id=str(row["id"]),
@@ -143,6 +143,24 @@ class EventService:
         await self._set_cache(cache_key, event.model_dump())
         return event
 
+    async def get_event_price_history(self, event_id: str) -> PriceHistory:
+
+        tiers: list[PriceHistory] = []
+        request_time = datetime.now(timezone.utc)
+        tiers_rows = await self.repository.get_event_tiers(event_id, request_time=request_time)
+
+        count=0
+        for tier_row in tiers_rows and count < 4:
+            tiers_rows = await self.repository.get_event_tiers(event_id, request_time=request_time)
+            tiers.append(PriceHistory(
+                date=request_time, 
+                price=tier_row["price"]
+            ))
+            request_time=request_time + timedelta(hours=2)
+            ++count
+
+        return tiers
+    
     async def _get_cache(self, key: str) -> Optional[dict]:
         try:
             raw = await self.cache.get(key)

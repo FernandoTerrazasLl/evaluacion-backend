@@ -42,3 +42,10 @@ class PaginatedEventsOut(BaseModel):
     count: int
     page: int
     results: list[EventListItemOut]
+
+class PriceHistoryOut(BaseModel):
+    diccionario: dict
+
+class HistoryOut(BaseModel):
+    price: Decimal | None
+    date: datetime

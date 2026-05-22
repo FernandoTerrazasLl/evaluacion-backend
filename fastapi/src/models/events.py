@@ -37,3 +37,7 @@ class EventDetail(BaseModel):
     available: int
     total_capacity: int
     tiers: list[Tier]
+
+class PriceHistory(BaseModel):
+    price: Decimal
+    date: datetime

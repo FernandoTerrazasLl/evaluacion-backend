@@ -3,7 +3,7 @@ from http import HTTPStatus
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 
-from api.v1.models.event import EventDetailOut, EventListItemOut, PaginatedEventsOut
+from api.v1.models.event import EventDetailOut, EventListItemOut, PaginatedEventsOut, PriceHistoryOut, HistoryOut
 from core import config
 from core.limiter import limiter, get_rate_limit
 from services.events import EventService, get_event_service
@@ -63,11 +63,10 @@ async def event_details(
 @limiter.limit(get_rate_limit)
 async def list_events(
     request: Request,
+    id: str,
     event_service: EventService = Depends(get_event_service),
-) -> PaginatedEventsOut:
-    count, results = await event_service.list_events()
-    return PaginatedEventsOut(
-        count=count,
-        page=page,
-        results=[EventListItemOut.model_validate(item.model_dump()) for item in results],
+) -> PriceHistoryOut:
+    lista = await event_service.get_event_price_history(id)
+    return PriceHistoryOut(
+        diccionario=[HistoryOut.model_validate(item.model_dump()) for item in lista]
     )
