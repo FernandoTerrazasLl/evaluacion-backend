@@ -141,7 +141,6 @@ class EventService:
         cache_client: Optional[CacheInterface] = None,
         search_service: Optional[EventSearchInterface] = None
     ):
-        # Backward compatibility for legacy tests that called EventService(mock_redis)
         if cache_client is None and search_service is None:
             self.cache = repository_or_cache
             try:

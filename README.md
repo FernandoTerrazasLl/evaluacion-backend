@@ -10,6 +10,14 @@ El trafico exterior entra por Nginx en el puerto 80. Nginx se encarga de rutear 
 
 <img width="918" height="613" alt="Image" src="https://github.com/user-attachments/assets/bc3ee9b9-fc85-4cae-9525-c4192cdab8ce" />
 
+### Fastapi
+
+<img width="1500" height="882" alt="Image" src="https://github.com/user-attachments/assets/b711324b-a00a-4192-97c5-71e6eb5cca10" />
+
+### Django
+
+<img width="1188" height="807" alt="Image" src="https://github.com/user-attachments/assets/d1a7c461-d861-40c6-b317-9936f1fba548" />
+
 ## COMO EJECUTAR EL PROYECTO
 
 Para levantar todo el entorno con un unico comando se debe ejecutar en la terminal `docker compose up --build -d` desde la carpeta raiz del proyecto. Esto creara y levantara los contenedores de Postgres, Redis, Django, FastAPI y Nginx de forma ordenada y con sus respectivos controles de salud.
