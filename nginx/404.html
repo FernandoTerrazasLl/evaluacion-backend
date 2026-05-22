@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>404 // Lost in the Noise</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@400;700&family=Bowlby+One+SC&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0a0a0a;
+      --paper: #f4f1e8;
+      --acid: #f7ff00;
+      --blood: #d62828;
+      --f-display: "Bowlby One SC", "Archivo Black", system-ui, sans-serif;
+      --f-block: "Archivo Black", system-ui, sans-serif;
+      --f-mono: "JetBrains Mono", ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0;
+      background: var(--ink);
+      color: var(--paper);
+      font-family: var(--f-mono);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: radial-gradient(rgba(244, 241, 232, 0.08) 1px, transparent 1px);
+      background-size: 3px 3px;
+      mix-blend-mode: screen;
+      z-index: 1;
+    }
+    .container {
+      max-width: 600px;
+      padding: 40px;
+      border: 4px solid var(--paper);
+      background: var(--ink);
+      box-shadow: 12px 12px 0 var(--blood);
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+    .logo {
+      font-family: var(--f-display);
+      font-size: 40px;
+      color: var(--acid);
+      letter-spacing: 0.04em;
+      margin-bottom: 20px;
+    }
+    .logo span { color: var(--paper); }
+    h1 {
+      font-family: var(--f-display);
+      font-size: clamp(48px, 8vw, 84px);
+      line-height: 0.9;
+      color: var(--blood);
+      margin: 0 0 20px;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+    }
+    p {
+      font-size: 16px;
+      margin: 0 0 30px;
+      line-height: 1.5;
+    }
+    .back-btn {
+      display: inline-block;
+      border: 3px solid var(--paper);
+      background: var(--acid);
+      color: var(--ink);
+      font-family: var(--f-block);
+      font-size: 14px;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 12px 24px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      box-shadow: 4px 4px 0 var(--paper);
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .back-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 var(--paper);
+      background: var(--paper);
+      color: var(--ink);
+    }
+    .footer {
+      margin-top: 30px;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: rgba(244, 241, 232, 0.5);
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">LOUD<span>//</span></div>
+    <h1>404</h1>
+    <p>
+      WE CHECKED THE TICKET BOOTH AND THE STAGE. THERE IS NOTHING BUT FEEDBACK HERE.
+    </p>
+    <a href="/" class="back-btn">RETURN TO GIGS</a>
+    <div class="footer">
+      ERROR 404 // ROUTE NOT FOUND
+    </div>
+  </div>
+</body>
+</html>
